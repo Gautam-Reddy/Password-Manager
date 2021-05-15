@@ -1,3 +1,4 @@
+import 'package:PasswordManager/encrypt_decrypt.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +102,7 @@ class _ViewPwdState extends State<ViewPwd> {
                      ),
                     Container(
                       child: Text(
-                        "Username: "+ widget.data['name'],
+                        "Username: "+ "${widget.data['name']}",
                           style: TextStyle(
                             fontSize: 20.0,
                             fontFamily: "lato",
@@ -113,7 +114,7 @@ class _ViewPwdState extends State<ViewPwd> {
                       padding: const EdgeInsets.only(top:8.0),
                       child: Container(
                         child: Text(
-                          "Password: "+"${widget.data['pwd']}",
+                          "Password: "+ Encrypt_decrypt.decrypt(widget.data['pwd']).toString(),
                             style: TextStyle(
                               fontSize: 20.0,
                               fontFamily: "lato",

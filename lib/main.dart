@@ -1,6 +1,10 @@
+import 'package:PasswordManager/screens/homepage.dart';
 import 'package:PasswordManager/screens/login.dart';
+// import 'package:firebase/firebase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -19,8 +23,18 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.white,
         scaffoldBackgroundColor: Color(0xff070706)
       ),
-      home: LoginPage(),
+      home: Wrapper(),
     );
+  }
+}
+//import 'package:firebase/firebase.dart';
+
+class Wrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    User user = FirebaseAuth.instance.currentUser;
+    if (user == null) return LoginPage();
+    return HomePage();
   }
 }
 

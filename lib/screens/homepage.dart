@@ -1,5 +1,6 @@
-import 'package:PasswordManager/main.dart';
+// import 'package:PasswordManager/main.dart';
 import 'package:PasswordManager/screens/addpwd.dart';
+import 'package:PasswordManager/screens/login.dart';
 import 'package:PasswordManager/screens/viewpwd.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -50,6 +51,26 @@ class _HomePageState extends State<HomePage> {
         ),
         elevation: 0.0,
         backgroundColor: Color(0xff070706),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () async {
+                User user = FirebaseAuth.instance.currentUser;
+                print("before" + user.toString());
+                await FirebaseAuth.instance.signOut();
+               //  user = FirebaseAuth.instance.currentUser;
+                print("After" + user.toString());
+                
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                      return LoginPage();
+                    }));
+                 
+              }),
+          SizedBox(
+            width: 10,
+          )
+        ],
       ),
       body: FutureBuilder<QuerySnapshot>(
         future: ref.get(),

@@ -1,3 +1,4 @@
+import 'package:PasswordManager/encrypt_decrypt.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -143,7 +144,7 @@ class _AddPwdState extends State<AddPwd> {
       var data = {
         'type' : type,
         'name' :name,
-        'pwd':pwd,
+        'pwd':Encrypt_decrypt.encrypt(pwd),
         'created':DateTime.now(),
       };
       
