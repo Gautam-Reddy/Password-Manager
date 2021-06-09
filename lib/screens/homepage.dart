@@ -13,21 +13,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   CollectionReference ref = FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .collection('passwords');
-        
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser.uid)
+      .collection('passwords');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) =>AddPwd(),
+        onPressed: () {
+          Navigator.of(context)
+              .push(
+            MaterialPageRoute(
+              builder: (context) => AddPwd(),
             ),
-          ).then((value){
+          )
+              .then((value) {
             print("Calling Set state");
             setState(() {});
           });
@@ -35,10 +37,9 @@ class _HomePageState extends State<HomePage> {
         child: Icon(
           Icons.add,
           color: Colors.white70,
-          ),
-          backgroundColor: Colors.grey[700],
+        ),
+        backgroundColor: Colors.grey[700],
       ),
-
       appBar: AppBar(
         title: Text(
           "My Passwords",
@@ -58,14 +59,13 @@ class _HomePageState extends State<HomePage> {
                 User user = FirebaseAuth.instance.currentUser;
                 print("before" + user.toString());
                 await FirebaseAuth.instance.signOut();
-               //  user = FirebaseAuth.instance.currentUser;
+                //  user = FirebaseAuth.instance.currentUser;
                 print("After" + user.toString());
-                
+
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) {
-                      return LoginPage();
-                    }));
-                 
+                  return LoginPage();
+                }));
               }),
           SizedBox(
             width: 10,
@@ -73,73 +73,71 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: FutureBuilder<QuerySnapshot>(
-        future: ref.get(),
-        builder: (context, snapshot){
-          if(snapshot.hasData){
-            return ListView.builder(
-              itemCount: snapshot.data.docs.length,
-
-              itemBuilder: (context,index) {
-                Map data=snapshot.data.docs[index].data();
-                DateTime mydateTime = data['created'].toDate();
-                String formattedTime=DateFormat.yMMMd().add_jm().format(mydateTime);
-                return InkWell(
-                  onTap: (){
-                    Navigator.of(context).push(
-                     MaterialPageRoute(
-                       builder: (context) => ViewPwd(
-                         data,
-                         formattedTime,
-                         snapshot.data.docs[index].reference,
-                         ),
-                     ),
-                    ).then((value){
-                      setState(() {});
-                    });
-                  },
-                  child: Card(
-                     color: Colors.grey[700],
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        //crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${data['type']}",
-                            style: TextStyle(
-                                fontSize: 24.0,
-                                fontFamily: "lato",
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                          ),
-
-
-                          Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                      
+          future: ref.get(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (context, index) {
+                    Map data = snapshot.data.docs[index].data();
+                    DateTime mydateTime = data['created'].toDate();
+                    String formattedTime =
+                        DateFormat.yMMMd().add_jm().format(mydateTime);
+                    return InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(
+                          MaterialPageRoute(
+                            builder: (context) => ViewPwd(
+                              data,
                               formattedTime,
-                              style: TextStyle(
-                              fontSize: 10.0,
-                              fontFamily: "lato",
-                              color: Colors.white,
+                              snapshot.data.docs[index].reference,
                             ),
-                            ),
-                          )
-                        ],
+                          ),
+                        )
+                            .then((value) {
+                          setState(() {});
+                        });
+                      },
+                      child: Card(
+                        color: Colors.grey[700],
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Column(
+                            //crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${data['type']}",
+                                style: TextStyle(
+                                  fontSize: 24.0,
+                                  fontFamily: "lato",
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  formattedTime,
+                                  style: TextStyle(
+                                    fontSize: 10.0,
+                                    fontFamily: "lato",
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                    ),
-                  ),
-                );
-              }
+                      ),
+                    );
+                  });
+            } else {
+              return Center(
+                child: Text("Loading..."),
               );
-          }else{
-            return Center(child: Text("Loading..."),
-            );
-          }
-        }
-        ),
+            }
+          }),
     );
   }
 }

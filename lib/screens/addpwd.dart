@@ -9,7 +9,6 @@ class AddPwd extends StatefulWidget {
 }
 
 class _AddPwdState extends State<AddPwd> {
-
   String type;
   String name;
   String pwd;
@@ -25,49 +24,41 @@ class _AddPwdState extends State<AddPwd> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   children: [
+                  children: [
                     ElevatedButton(
-                      onPressed: (){
+                      onPressed: () {
                         Navigator.of(context).pop();
-                      }, 
+                      },
                       child: Icon(
                         Icons.arrow_back_ios_outlined,
                         size: 24.0,
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          Colors.grey[700],
                         ),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                            Colors.grey[700],
-                          ),
-                          padding: MaterialStateProperty.all(
-                            EdgeInsets.symmetric(
-                              horizontal: 25.0,
-                              vertical: 8.0
-                            )
-                          ),
-                        ),
+                        padding: MaterialStateProperty.all(EdgeInsets.symmetric(
+                            horizontal: 25.0, vertical: 8.0)),
+                      ),
                     ),
                     ElevatedButton(
-                      onPressed: add, 
+                      onPressed: add,
                       child: Text(
-                        "Save",style: TextStyle(
-                            fontSize: 18.0,
-                            fontFamily: "lato",
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                        "Save",
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontFamily: "lato",
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                            Colors.grey[700],
-                          ),
-                          padding: MaterialStateProperty.all(
-                            EdgeInsets.symmetric(
-                              horizontal: 25.0,
-                              vertical: 8.0
-
-                            )
-                          ),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          Colors.grey[700],
                         ),
+                        padding: MaterialStateProperty.all(EdgeInsets.symmetric(
+                            horizontal: 25.0, vertical: 8.0)),
+                      ),
                     ),
                   ],
                 ),
@@ -78,49 +69,46 @@ class _AddPwdState extends State<AddPwd> {
                   child: Column(
                     children: [
                       TextFormField(
-                        decoration: InputDecoration.collapsed(
-                          hintText: "Account Type"
-                          ),
-                          style: TextStyle(
-                            fontSize: 32.0,
-                            fontFamily: "lato",
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey,
-                          ),
-                          onChanged: (_val){
-                            type=_val;
-                          },
+                        decoration:
+                            InputDecoration.collapsed(hintText: "Account Type"),
+                        style: TextStyle(
+                          fontSize: 32.0,
+                          fontFamily: "lato",
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                        onChanged: (_val) {
+                          type = _val;
+                        },
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 12.0),
                         child: TextFormField(
-                          decoration: InputDecoration.collapsed(
-                            hintText: "Username"
-                            ),
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontFamily: "lato",
-                              color: Colors.grey,
-                            ),
-                            onChanged: (_val){
-                              name=_val;
-                            },
+                          decoration:
+                              InputDecoration.collapsed(hintText: "Username"),
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontFamily: "lato",
+                            color: Colors.grey,
+                          ),
+                          onChanged: (_val) {
+                            name = _val;
+                          },
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 12.0),
                         child: TextFormField(
-                          decoration: InputDecoration.collapsed(
-                            hintText: "Password"
-                            ),
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontFamily: "lato",
-                              color: Colors.grey,
-                            ),
-                            onChanged: (_val){
-                              pwd=_val;
-                            },
+                          decoration:
+                              InputDecoration.collapsed(hintText: "Password"),
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontFamily: "lato",
+                            color: Colors.grey,
+                          ),
+                          onChanged: (_val) {
+                            pwd = _val;
+                          },
                         ),
                       ),
                     ],
@@ -134,26 +122,20 @@ class _AddPwdState extends State<AddPwd> {
     );
   }
 
-
-      void add() async{
-        CollectionReference ref = FirebaseFirestore.instance
+  void add() async {
+    CollectionReference ref = FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser.uid)
         .collection('passwords');
 
-      var data = {
-        'type' : type,
-        'name' :name,
-        'pwd':Encrypt_decrypt.encrypt(pwd),
-        'created':DateTime.now(),
-      };
-      
-      ref.add(data);
-      Navigator.pop(context);
-    }
+    var data = {
+      'type': type,
+      'name': name,
+      'pwd': Encrypt_decrypt.encrypt(pwd),
+      'created': DateTime.now(),
+    };
 
-
-
-
-
+    ref.add(data);
+    Navigator.pop(context);
+  }
 }

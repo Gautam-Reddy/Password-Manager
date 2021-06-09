@@ -10,7 +10,7 @@ class Encrypt_decrypt {
     return encrypted.base64;
   }
 
-  static decrypt( text) {
+  static decrypt(text) {
     final decrypted = encrypter.decrypt64(text, iv: iv);
     return decrypted;
   }

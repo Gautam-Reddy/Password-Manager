@@ -4,8 +4,9 @@ import 'package:PasswordManager/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+
 // import 'package:firebase_auth/firebase_auth.dart';
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
@@ -19,10 +20,9 @@ class MyApp extends StatelessWidget {
       title: 'My Password Manager',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
-        primaryColor: Colors.white,
-        accentColor: Colors.white,
-        scaffoldBackgroundColor: Color(0xff070706)
-      ),
+          primaryColor: Colors.white,
+          accentColor: Colors.white,
+          scaffoldBackgroundColor: Color(0xff070706)),
       home: Wrapper(),
     );
   }
@@ -37,4 +37,3 @@ class Wrapper extends StatelessWidget {
     return HomePage();
   }
 }
-

@@ -5,58 +5,54 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-GoogleSignIn googleSignIn=GoogleSignIn();
-FirebaseAuth auth= FirebaseAuth.instance;
+GoogleSignIn googleSignIn = GoogleSignIn();
+FirebaseAuth auth = FirebaseAuth.instance;
 CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-Future<bool> signInWithGoogle(BuildContext context) async{
+Future<bool> signInWithGoogle(BuildContext context) async {
+  try {
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
 
-  try{
-    final GoogleSignInAccount googleSignInAccount=await googleSignIn.signIn();
-    
-    if(googleSignInAccount!=null){
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
 
-      final GoogleSignInAuthentication googleSignInAuthentication= await googleSignInAccount.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken);
 
-      final AuthCredential credential= GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken
-      );
+      final UserCredential authResult =
+          await auth.signInWithCredential(credential);
 
-      final UserCredential authResult=await auth.signInWithCredential(credential);
+      final User user = authResult.user;
 
-      final User user=authResult.user;
-
-      var userData={
-        'name':googleSignInAccount.displayName,
-        'provider':'google',
+      var userData = {
+        'name': googleSignInAccount.displayName,
+        'provider': 'google',
         'photoUrl': googleSignInAccount.photoUrl,
-        'email':googleSignInAccount.email,
+        'email': googleSignInAccount.email,
       };
 
       users.doc(user.uid).get().then((doc) {
-        if(doc.exists){
+        if (doc.exists) {
           doc.reference.update(userData);
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => HomePage(),
-              ),
+            ),
           );
-
-        }else{
+        } else {
           users.doc(user.uid).set(userData);
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => HomePage(),
-              ),
+            ),
           );
         }
-
       });
     }
-  }catch(PlatformException){
+  } catch (PlatformException) {
     print(PlatformException);
     print("Sign in not Successful !");
   }
-
 }
